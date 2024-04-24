@@ -1,0 +1,3 @@
+module MIA_P1
+
+go 1.21.6
