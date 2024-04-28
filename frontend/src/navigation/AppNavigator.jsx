@@ -3,7 +3,7 @@ import { Routes, Route, HashRouter } from 'react-router-dom'
 import { useState } from "react";
 
 import Home from '../pages/home/home'
-
+import Commands from '../pages/DiskCreen/DiskCreen'
 
 export default function AppNavigator() {
   const [ip, setIP] = useState("localhost") 
@@ -18,9 +18,8 @@ export default function AppNavigator() {
       IP: <input type="text" onChange={handleChage}/> -- {ip}
       <Routes>
          
-          <Route path="/" element={<Home/>} />
-     
-
+      <Route path="/" element={<Home/>} />
+      <Route path="/DiskCreen" element={<Commands ip={ip}/>} />
       </Routes>
     </HashRouter>
   )
