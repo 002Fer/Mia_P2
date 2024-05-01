@@ -1,67 +1,79 @@
 import partitionIMG from "../../assets/particion.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-
-export default function Partition({ip="localhost"}) {
+import { useLocation } from "react-router-dom";
+export default function Partition({ ip = "localhost" }) {
   const { id } = useParams()
-  const [data, setData] = useState([])
-  const navigate = useNavigate()
-  const [data2, setData2] = useState([])
+  const [data, setData] = useState([]) 
+    const navigate = useNavigate()
 
-  // execute the fetch command only once and when the component is loaded
-  useState(() => {
-    console.log(`fech to http://${ip}:4000/`)
-    fetch(`http://${ip}:4000/tasks`)
-      .then(response => response.json())
-      .then(data => {console.log(data); setData2(data);})
     
-    const rawData = {
-      "rutas": ["Part1", "Part2", "Part3", "Part4", "Part5",]
+    // execute the fetch command only once and when the component is loaded
+    useState(() => {
+ 
+
+      var dataF = {
+        User: 'root',
+        Password: 'root'
+      }
+      
+      console.log(`fech to http://${ip}:8081/`)
+      fetch(`http://${ip}:8081/particiones`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(dataF)
+      })
+      .then(response => response.json())
+      .then(rowdata => {
+        console.log(rowdata); // Do something with the response
+        setData(rowdata.List)
+      })
+      .catch(error => {
+        console.error('There was an error with the fetch operation:', error);
+      });
+    }, [])
+    const onClick = (objIterable) => {
+      console.log("click", objIterable)
+      navigate(`/login/${id}/${objIterable}`)
     }
-    setData(rawData.rutas)
+    const location = useLocation();
 
-  }, [])
+return (
+  <>
+    
+    <p>{location.pathname}</p>
+    <br />
+    <Link to="/DiskCreen">Commands</Link>
+    <br />
+    <br />
+    <br />
+    <br />
 
-  const onClick = (objIterable) => {
-    console.log("click", objIterable)
-    navigate(`/login/${id}/${objIterable}`)
-  }
 
-  return (
-    <>
-      <p>Hola Partition {id}</p>
-      <br />
-      <Link to="/DiskCreen">Commands</Link>
-      <br />
-      <br />
-      <br />
-      <br />
+    <div style={{ border: "red 1px solid", display: "flex", flexDirection: "row" }}>
 
-      <h1>{data2.Status}</h1>
-      <h2>{data2.Value}</h2>
+      {
+        data.map((objIterable, index) => {
+          return (
+            <div key={index} style={{
+              border: "green 1px solid",
+              display: "flex",
+              flexDirection: "column", // Alinea los elementos en columnas
+              alignItems: "center", // Centra verticalmente los elementos
+              maxWidth: "100px",
+            }}
+              onClick={() => onClick(objIterable)}
+            >
+              <img src={partitionIMG} alt="disk" style={{ width: "100px" }} />
+              <p>{objIterable}</p>
+            </div>
+          )
+        })
+      }
 
-      <div style={{ border: "red 1px solid", display: "flex", flexDirection: "row" }}>
-
-        {
-          data.map((objIterable, index) => {
-            return (
-              <div key={index} style={{
-                border: "green 1px solid",
-                display: "flex",
-                flexDirection: "column", // Alinea los elementos en columnas
-                alignItems: "center", // Centra verticalmente los elementos
-                maxWidth: "100px",
-              }}
-                onClick={() => onClick(objIterable)}
-              >
-                <img src={partitionIMG} alt="disk" style={{ width: "100px" }} />
-                <p>{objIterable}</p>
-              </div>
-            )
-          })
-        }
-
-      </div>
-    </>
-  )
+    </div>
+  </>
+)
 }

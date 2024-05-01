@@ -1,5 +1,7 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
@@ -10,7 +12,7 @@ export default function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://localhost:8080/submit", {
+    fetch("http://localhost:8081/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -30,32 +32,38 @@ export default function Home() {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/DiskCreen">Commands</Link>
-          </li>
-          <li>
-            <Link to="/page2">Page 2</Link>
-          </li>
-        </ul>
+    <div>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">PANTALLA1</Link>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <Link className="nav-link" to="/DiskCreen">PANTALA2</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/Reportes">PANTALLA3</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
       </nav>
-      <div>
-        <p>Hola mundo</p>
-        <br />
+      <div style={{ padding: '20px' }}>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
+          <textarea
+            className="form-control"
             value={inputValue}
             onChange={handleChange}
             placeholder="Enter something"
+            rows={5} // Set the number of visible rows
           />
-          <button type="submit">Submit</button>
-          <button type="button" onClick={handleClear}>Clear</button>
+          <div className="mt-3">
+            <button className="btn btn-outline-success me-2" type="submit">Submit</button>
+            <button className="btn btn-outline-danger" type="button" onClick={handleClear}>Clear</button>
+          </div>
         </form>
       </div>
     </div>
